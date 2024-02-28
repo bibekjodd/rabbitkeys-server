@@ -14,8 +14,7 @@
     "noUncheckedIndexedAccess": true,
     "strictNullChecks": true,
 
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "CommonJS",
     "lib": ["ES2022"],
 
     "paths": {
