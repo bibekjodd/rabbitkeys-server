@@ -9,7 +9,11 @@ export const serializer = () => {
   });
   passport.deserializeUser(async (id: string, done) => {
     try {
-      const [user] = await db.select().from(users).where(eq(users.id, id));
+      const [user] = await db
+        .update(users)
+        .set({ lastOnline: new Date().toISOString() })
+        .where(eq(users.id, id))
+        .returning();
       done(null, user || null);
     } catch (error) {
       done(error, null);
