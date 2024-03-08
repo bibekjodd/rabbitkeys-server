@@ -1,5 +1,6 @@
 import { EnvType } from '@/config/env.config';
 import { User as TUser } from './schemas/user.schema';
+import Pusher from 'pusher';
 
 export {};
 declare global {
@@ -14,4 +15,6 @@ declare global {
       user: TUser;
     }
   }
+
+  var __PUSHER__: Pusher | undefined;
 }

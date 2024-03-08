@@ -8,6 +8,9 @@ export const users = sqliteTable(
     name: text('name', { length: 50 }).notNull(),
     email: text('email', { length: 50 }).notNull(),
     image: text('image'),
+    carImage: text('car_image')
+      .notNull()
+      .default('https://i.postimg.cc/F1thctp0/car5.png'),
     role: text('role', { enum: ['user', 'admin'] })
       .notNull()
       .default('user'),

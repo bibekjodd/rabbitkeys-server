@@ -36,7 +36,11 @@ const envSchema = z
     AUTH_REDIRECT_URI: z
       .string()
       .optional()
-      .transform((uri) => uri || '/')
+      .transform((uri) => uri || '/'),
+
+    PUSHER_APP_ID: z.string(),
+    PUSHER_KEY: z.string(),
+    PUSHER_SECRET: z.string()
   })
   .readonly();
 

@@ -8,11 +8,12 @@ import {
 } from 'drizzle-orm/sqlite-core';
 import { users } from './user.schema';
 
-type PlayerState = {
+export type PlayerState = {
   id: string;
   name: string;
   email: string;
   image: string | null;
+  carImage: string | null;
   isFinished: boolean;
   lastSeen: string;
 };

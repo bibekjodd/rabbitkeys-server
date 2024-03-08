@@ -1,12 +1,20 @@
 import { createId } from '@paralleldrive/cuid2';
-import { primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import {
+  integer,
+  primaryKey,
+  sqliteTable,
+  text
+} from 'drizzle-orm/sqlite-core';
 
 export const paragraphs = sqliteTable(
   'paragraphs',
   {
     id: text('id').notNull().$defaultFn(createId),
-    content: text('content').notNull()
+    text: text('text').notNull(),
+    wordsLength: integer('words_length').notNull(),
+    charactersLength: integer('characters_length').notNull()
   },
+
   function constraints(paragraphs) {
     return {
       primaryKey: primaryKey({
