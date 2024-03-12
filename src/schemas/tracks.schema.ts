@@ -16,6 +16,9 @@ export type PlayerState = {
   carImage: string | null;
   isFinished: boolean;
   lastSeen: string;
+  speed?: number;
+  duration?: number;
+  position?: number;
 };
 
 export const tracks = sqliteTable(

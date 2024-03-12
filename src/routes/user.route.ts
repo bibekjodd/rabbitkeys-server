@@ -1,5 +1,9 @@
 import { env } from '@/config/env.config';
-import { getProfile, getUserDetails } from '@/controllers/user.controller';
+import {
+  getProfile,
+  getUserDetails,
+  logoutUser
+} from '@/controllers/user.controller';
 import { Router } from 'express';
 import passport from 'passport';
 
@@ -17,3 +21,4 @@ router.get('/callback/google', passport.authenticate('google'), (req, res) => {
 
 router.get('/profile', getProfile);
 router.get('/user/:id', getUserDetails);
+router.get('/logout', logoutUser);

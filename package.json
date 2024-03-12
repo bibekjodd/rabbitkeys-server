@@ -1,5 +1,5 @@
 {
-  "name": "express-server",
+  "name": "rabbitkeys-server",
   "version": "1.0.0",
   "main": "dist/app.js",
   "scripts": {

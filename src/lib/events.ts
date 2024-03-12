@@ -1,3 +1,5 @@
+import { Track } from '@/schemas/tracks.schema';
+
 export const events = {
   joinedTrack: 'joined-track',
   leftTrack: 'left-track',
@@ -19,7 +21,7 @@ export type LeftTrackResponse = {
 
 export type RaceStartedResponse = unknown;
 
-export type RaceFinishedResponse = unknown;
+export type RaceFinishedResponse = { track: Track };
 
 export type TrackDeletedResponse = {
   message: string;
