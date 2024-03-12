@@ -13,6 +13,7 @@ import { GoogleStrategy } from './passport/google.strategy';
 import { serializer } from './passport/serializer';
 import { paragraphRoute } from './routes/paragraph.route';
 import { raceRoute } from './routes/race.route';
+import { statsRoute } from './routes/stats.route';
 import { trackRoute } from './routes/track.route';
 import { userRoute } from './routes/user.route';
 
@@ -47,6 +48,7 @@ app.use('/api', userRoute);
 app.use('/api', trackRoute);
 app.use('/api', raceRoute);
 app.use('/api', paragraphRoute);
+app.use('/api', statsRoute);
 app.use(() => {
   throw new NotFoundException();
 });

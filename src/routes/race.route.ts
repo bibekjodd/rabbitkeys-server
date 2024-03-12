@@ -1,5 +1,4 @@
 import {
-  getRacesData,
   startRace,
   updateRaceData,
   updateScore
@@ -10,4 +9,3 @@ const router = Router();
 export const raceRoute = router;
 router.route('/race/:id').get(startRace).put(updateScore);
 router.put('/race', updateRaceData);
-router.get('/races', getRacesData);

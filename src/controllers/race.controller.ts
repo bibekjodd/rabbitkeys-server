@@ -1,6 +1,6 @@
 import { db } from '@/config/database';
 import { pusher } from '@/config/pusher';
-import { getRacesDataSchema, updateScoreSchema } from '@/dtos/race.dto';
+import { updateScoreSchema } from '@/dtos/race.dto';
 import {
   RaceFinishedResponse,
   RaceStartedResponse,
@@ -19,7 +19,7 @@ import { tracks } from '@/schemas/tracks.schema';
 import { generateParagraph } from '@/services/paragraph.service';
 import { updateRaceDataFromTrack } from '@/services/race.service';
 import { dismissInactiveTrack, joinTrack } from '@/services/track.service';
-import { and, desc, eq, lt } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 
 export const startRace = handleAsync<{ id: string }>(async (req, res) => {
   if (!req.user) throw new UnauthorizedException();
@@ -159,19 +159,6 @@ export const updateScore = handleAsync<
   }
 
   return res.json({ message: 'Score updated successfully' });
-});
-
-export const getRacesData = handleAsync(async (req, res) => {
-  if (!req.user) throw new UnauthorizedException();
-  const { cursor, limit } = getRacesDataSchema.parse(req.query);
-  const result = await db
-    .select()
-    .from(races)
-    .where(and(eq(races.userId, req.user.id), lt(races.createdAt, cursor)))
-    .orderBy(desc(races.createdAt))
-    .limit(limit);
-
-  return res.json({ races: result });
 });
 
 export const updateRaceData = handleAsync<unknown, unknown, { speed: unknown }>(

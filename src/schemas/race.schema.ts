@@ -1,6 +1,8 @@
+import { createId } from '@paralleldrive/cuid2';
 import {
   foreignKey,
   integer,
+  primaryKey,
   sqliteTable,
   text
 } from 'drizzle-orm/sqlite-core';
@@ -9,6 +11,7 @@ import { users } from './user.schema';
 export const races = sqliteTable(
   'races',
   {
+    id: text('id').notNull().$defaultFn(createId),
     userId: text('user_id').notNull(),
     position: integer('position').notNull(),
     speed: integer('speed').notNull(),
@@ -17,6 +20,7 @@ export const races = sqliteTable(
   },
   function constraints(races) {
     return {
+      primaryKey: primaryKey({ name: 'races_pkey', columns: [races.id] }),
       userReference: foreignKey(() => ({
         name: 'fk_user_id',
         columns: [races.userId],

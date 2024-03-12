@@ -30,3 +30,24 @@ export const users = sqliteTable(
 );
 
 export type User = typeof users.$inferSelect;
+export const selectUserSnapshot = {
+  id: users.id,
+  name: users.name,
+  email: users.email,
+  image: users.image,
+  carImage: users.carImage,
+  role: users.role,
+  createdAt: users.createdAt,
+  lastOnline: users.lastOnline
+};
+export type UserSnapshot = {
+  id: string;
+  name: string;
+  email: string;
+  image: string | null;
+  carImage: string | null;
+  role: string;
+  createdAt: string;
+  lastOnline: string;
+  speed: number;
+};
