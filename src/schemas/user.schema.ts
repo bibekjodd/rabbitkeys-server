@@ -56,7 +56,7 @@ export type UserSnapshot = {
   name: string;
   email: string;
   image: string | null;
-  carImage: string | null;
+  carImage: string;
   speed: number;
   topSpeed: number;
   role: string;
