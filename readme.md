@@ -15,7 +15,7 @@
 
 ### Screenshots
 
-![page](https://i.postimg.cc/1zGxRWFS/Screenshot-2024-04-11-204346.png)
+![page](https://i.postimg.cc/440YrTDj/Screenshot-2024-04-11-210718.png)
 ![page](https://i.postimg.cc/Cxffvw3z/Screenshot-2024-04-11-182428.png)
 ![page](https://i.postimg.cc/3w50VPh9/Screenshot-2024-04-11-182303.png)
 ![page](https://i.postimg.cc/s20Fwmm3/Screenshot-2024-04-11-201129.png)
