@@ -3,7 +3,7 @@ import { updateProfileSchema } from '@/dtos/user.dto';
 import { NotFoundException, UnauthorizedException } from '@/lib/exceptions';
 import { handleAsync } from '@/middlewares/handle-async';
 import { users } from '@/schemas/user.schema';
-import { eq } from 'drizzle-orm';
+import { and, eq, gt, like, ne, or } from 'drizzle-orm';
 
 export const getProfile = handleAsync(async (req, res) => {
   if (!req.user) throw new UnauthorizedException();
@@ -27,7 +27,11 @@ export const logoutUser = handleAsync(async (req, res) => {
 export const updateProfile = handleAsync(async (req, res) => {
   if (!req.user) throw new UnauthorizedException();
   const data = updateProfileSchema.parse(req.body);
-  const [user] = await db.update(users).set(data).returning();
+  const [user] = await db
+    .update(users)
+    .set(data)
+    .where(eq(users.id, req.user.id))
+    .returning();
   return res.json({ user: user || null });
 });
 
@@ -38,4 +42,31 @@ export const deleteProfile = handleAsync(async (req, res) => {
   req.logout(() => {
     res.json({ message: 'Account deleted successfully' });
   });
+});
+
+export const searchActivePlayers = handleAsync<
+  unknown,
+  unknown,
+  unknown,
+  { q: string }
+>(async (req, res) => {
+  let query = req.query.q;
+  if (!query || typeof query !== 'string') {
+    query ||= '';
+  }
+  query = query.trim();
+  const THIRTY_SECONDS = 30 * 1000;
+  const inactivityTime = new Date(Date.now() - THIRTY_SECONDS).toISOString();
+  const players = await db
+    .select()
+    .from(users)
+    .where(
+      and(
+        gt(users.lastOnline, inactivityTime),
+        or(like(users.name, `%${query}%`), like(users.email, `%${query}%`)),
+        req.user ? ne(users.id, req.user.id) : undefined
+      )
+    )
+    .limit(20);
+  return res.json({ players });
 });

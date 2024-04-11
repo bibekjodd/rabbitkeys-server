@@ -14,10 +14,9 @@ import {
   UnauthorizedException
 } from '@/lib/exceptions';
 import { handleAsync } from '@/middlewares/handle-async';
-import { races } from '@/schemas/race.schema';
 import { tracks } from '@/schemas/tracks.schema';
 import { generateParagraph } from '@/services/paragraph.service';
-import { updateRaceDataFromTrack } from '@/services/race.service';
+import { updateRaceResultFromTrack } from '@/services/race.service';
 import { dismissInactiveTrack, joinTrack } from '@/services/track.service';
 import { eq } from 'drizzle-orm';
 
@@ -77,19 +76,18 @@ export const startRace = handleAsync<{ id: string }>(async (req, res) => {
   return res.json({ track });
 });
 
-export const updateScore = handleAsync<
-  { id: string },
-  unknown,
-  { speed: unknown; progress: unknown; duration: unknown }
->(async (req, res) => {
+export const updateScore = handleAsync<{ id: string }>(async (req, res) => {
   if (!req.user) throw new UnauthorizedException();
   const trackId = req.params.id;
-  const { speed, progress, duration } = updateScoreSchema.parse(req.body);
+  const { speed, progress, duration, accuracy, topSpeed } =
+    updateScoreSchema.parse(req.body);
 
   pusher.trigger(trackId, events.updateScore, {
     playerId: req.user.id,
     progress,
-    speed
+    speed,
+    accuracy,
+    topSpeed
   } satisfies UpdateScoreResponse);
 
   if (progress !== 100)
@@ -122,7 +120,9 @@ export const updateScore = handleAsync<
       lastSeen: new Date().toISOString(),
       speed,
       duration,
-      position
+      position,
+      topSpeed,
+      accuracy
     };
   });
 
@@ -155,27 +155,8 @@ export const updateScore = handleAsync<
     pusher.trigger(trackId, events.raceFinished, {
       track: track!
     } satisfies RaceFinishedResponse);
-    track && updateRaceDataFromTrack(track);
+    track && updateRaceResultFromTrack(track);
   }
 
   return res.json({ message: 'Score updated successfully' });
 });
-
-export const updateRaceData = handleAsync<unknown, unknown, { speed: unknown }>(
-  async (req, res) => {
-    if (!req.user) throw new UnauthorizedException();
-    if (typeof req.body.speed !== 'number')
-      throw new BadRequestException('Invalid data sent to update race data');
-
-    db.insert(races)
-      .values({
-        userId: req.user.id,
-        isMultiplayer: 0,
-        createdAt: new Date().toISOString(),
-        position: 1,
-        speed: req.body.speed
-      })
-      .execute();
-    return res.json({ message: 'Data updated successfully' });
-  }
-);

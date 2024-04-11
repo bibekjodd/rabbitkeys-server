@@ -8,11 +8,11 @@ export const devConsole = (...args: string[]) => {
   }
 };
 
-const cookieOptions: CookieOptions = {
+export const cookieOptions: CookieOptions = {
+  maxAge: Date.now() + 30 * 24 * 60 * 60 * 1000,
   httpOnly: true,
-  secure: env.NODE_ENV === 'production' ? true : false,
-  sameSite: env.NODE_ENV === 'production' ? 'none' : 'lax',
-  maxAge: 30 * 24 * 60 * 60 * 1000
+  secure: env.NODE_ENV !== 'production' ? false : true,
+  sameSite: env.NODE_ENV !== 'production' ? 'lax' : 'none'
 };
 
 export const sessionOptions: SessionOptions = {

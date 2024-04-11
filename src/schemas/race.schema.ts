@@ -14,7 +14,9 @@ export const races = sqliteTable(
     id: text('id').notNull().$defaultFn(createId),
     userId: text('user_id').notNull(),
     position: integer('position').notNull(),
-    speed: integer('speed').notNull(),
+    accuracy: integer('accuracy').notNull().default(0),
+    speed: integer('speed').notNull().default(0),
+    topSpeed: integer('top_speed').notNull().default(0),
     createdAt: text('created_at').notNull(),
     isMultiplayer: integer('is_multiplayer').notNull()
   },

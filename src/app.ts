@@ -13,6 +13,7 @@ import { GoogleStrategy } from './passport/google.strategy';
 import { serializer } from './passport/serializer';
 import { paragraphRoute } from './routes/paragraph.route';
 import { raceRoute } from './routes/race.route';
+import { resultRoute } from './routes/result.route';
 import { statsRoute } from './routes/stats.route';
 import { trackRoute } from './routes/track.route';
 import { userRoute } from './routes/user.route';
@@ -22,6 +23,7 @@ validateEnv();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ credentials: true, origin: env.FRONTEND_URLS }));
+app.enable('trust proxy');
 app.use(session(sessionOptions));
 if (env.NODE_ENV === 'development') {
   app.use(morgan('common'));
@@ -48,6 +50,7 @@ app.use('/api', userRoute);
 app.use('/api', trackRoute);
 app.use('/api', raceRoute);
 app.use('/api', paragraphRoute);
+app.use('/api', resultRoute);
 app.use('/api', statsRoute);
 app.use(() => {
   throw new NotFoundException();
