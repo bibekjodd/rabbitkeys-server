@@ -33,9 +33,7 @@ export const startRace = handleAsync<{ id: string }>(async (req, res) => {
   if (!track) throw new NotFoundException();
   if (track.creator !== req.user.id)
     throw new ForbiddenException('Only creator can start the race');
-
   if (track.isStarted) throw new BadRequestException('Race has already begun!');
-
   await dismissInactiveTrack(track);
   track = joinTrack(track, {
     id: req.user.id,
@@ -69,6 +67,7 @@ export const startRace = handleAsync<{ id: string }>(async (req, res) => {
       isFinished: false,
       finishedAt: null
     })
+    .where(eq(tracks.id, trackId))
     .returning();
 
   pusher.trigger(trackId, events.raceStarted, {} satisfies RaceStartedResponse);
@@ -149,13 +148,14 @@ export const updateScore = handleAsync<{ id: string }>(async (req, res) => {
       paragraphId: track.paragraphId,
       nextParagraphId: track.nextParagraphId
     })
+    .where(eq(tracks.id, trackId))
     .returning();
 
   if (isRaceFinished) {
     pusher.trigger(trackId, events.raceFinished, {
       track: track!
     } satisfies RaceFinishedResponse);
-    track && updateRaceResultFromTrack(track);
+    if (track) updateRaceResultFromTrack(track);
   }
 
   return res.json({ message: 'Score updated successfully' });

@@ -8,7 +8,6 @@ export const handleErrorRequest: ErrorRequestHandler = (
   res,
   next
 ) => {
-  next;
   let message = err.message || 'Internal Server Error';
   let statusCode = err.statusCode || 500;
   if (err instanceof Error) {

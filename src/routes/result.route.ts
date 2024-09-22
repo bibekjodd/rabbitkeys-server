@@ -7,5 +7,4 @@ import { Router } from 'express';
 const router = Router();
 export const resultRoute = router;
 
-router.post('/result', updateRaceResult);
-router.get('/results', getPreviousResults);
+router.route('/').post(updateRaceResult).get(getPreviousResults);

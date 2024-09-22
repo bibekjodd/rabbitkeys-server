@@ -7,5 +7,5 @@ import { Router } from 'express';
 const router = Router();
 export const paragraphRoute = router;
 
-router.get('/paragraph', generateRandomParagraph);
-router.get('/paragraph/:id', generateParagraphById);
+router.get('/', generateRandomParagraph);
+router.get('/:id', generateParagraphById);

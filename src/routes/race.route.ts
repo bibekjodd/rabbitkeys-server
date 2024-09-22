@@ -3,4 +3,4 @@ import { Router } from 'express';
 
 const router = Router();
 export const raceRoute = router;
-router.route('/race/:id').get(startRace).put(updateScore);
+router.route('/:id').get(startRace).put(updateScore);

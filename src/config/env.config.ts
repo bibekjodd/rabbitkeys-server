@@ -19,7 +19,6 @@ const envSchema = z
         port = Number(process.argv[indexOfPort + 1]) || 5000;
         return port;
       }),
-    MONGO_URI: z.string(),
     DATABASE_URL: z.string(),
     DATABASE_AUTH_TOKEN: z.string(),
 
@@ -32,11 +31,6 @@ const envSchema = z
     GOOGLE_CLIENT_ID: z.string(),
     GOOGLE_CLIENT_SECRET: z.string(),
     GOOGLE_CALLBACK_URL: z.string(),
-
-    AUTH_REDIRECT_URI: z
-      .string()
-      .optional()
-      .transform((uri) => uri || '/'),
 
     PUSHER_APP_ID: z.string(),
     PUSHER_KEY: z.string(),
@@ -51,6 +45,7 @@ export const validateEnv = () => {
   try {
     return envSchema.parse(process.env);
   } catch (error) {
+    if (error instanceof Error) console.log(error.message);
     console.log(`Environment variables validation failed\nExitting app`.red);
     process.exit(1);
   }
