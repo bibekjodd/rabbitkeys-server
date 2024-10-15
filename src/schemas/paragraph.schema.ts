@@ -5,6 +5,7 @@ import {
   sqliteTable,
   text
 } from 'drizzle-orm/sqlite-core';
+import { createSelectSchema } from 'drizzle-zod';
 
 export const paragraphs = sqliteTable(
   'paragraphs',
@@ -25,3 +26,5 @@ export const paragraphs = sqliteTable(
   }
 );
 export type Paragraph = typeof paragraphs.$inferSelect;
+export const responseParagraphSchema = createSelectSchema(paragraphs);
+export type ResponseParagraph = Paragraph;

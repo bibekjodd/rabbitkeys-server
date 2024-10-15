@@ -5,6 +5,6 @@ import {
 import { Router } from 'express';
 
 const router = Router();
-export const resultRoute = router;
+export const resultsRoute = router;
 
 router.route('/').post(updateRaceResult).get(getPreviousResults);

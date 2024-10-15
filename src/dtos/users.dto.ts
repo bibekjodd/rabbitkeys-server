@@ -22,3 +22,16 @@ export const updateProfileSchema = z
   .refine((value) => {
     return Object.keys(value).length > 0;
   }, 'Please provide at least one property to update');
+
+export const queryUsersSchema = z.object({
+  q: z.string().optional(),
+  cursor: z.string().optional(),
+  limit: z.preprocess(
+    (val) => Number(val) || undefined,
+    z.number().min(1).max(100).default(20)
+  ),
+  active: z.preprocess(
+    (val) => (val ? val === 'true' : undefined),
+    z.boolean().optional()
+  )
+});

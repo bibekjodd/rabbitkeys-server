@@ -59,7 +59,7 @@ export const joinTrack = (track: Track, player: PlayerState) => {
       id: player.id,
       name: player.name,
       email: player.email,
-      image: player.image
+      image: player.image || null
     }
   } satisfies JoinedTrackResponse);
 

@@ -1,4 +1,5 @@
 import { createId } from '@paralleldrive/cuid2';
+import { getTableColumns } from 'drizzle-orm';
 import {
   integer,
   primaryKey,
@@ -6,6 +7,7 @@ import {
   text,
   unique
 } from 'drizzle-orm/sqlite-core';
+import { createSelectSchema } from 'drizzle-zod';
 
 export const users = sqliteTable(
   'users',
@@ -39,27 +41,7 @@ export const users = sqliteTable(
 );
 
 export type User = typeof users.$inferSelect;
-export const selectUserSnapshot = {
-  id: users.id,
-  name: users.name,
-  email: users.email,
-  image: users.image,
-  carImage: users.carImage,
-  speed: users.speed,
-  topSpeed: users.topSpeed,
-  role: users.role,
-  createdAt: users.createdAt,
-  lastOnline: users.lastOnline
-};
-export type UserSnapshot = {
-  id: string;
-  name: string;
-  email: string;
-  image: string | null;
-  carImage: string;
-  speed: number;
-  topSpeed: number;
-  role: string;
-  createdAt: string;
-  lastOnline: string;
-};
+export const selectUserSnapshot = getTableColumns(users);
+export const selectUserSchema = createSelectSchema(users);
+export const responseUserSchema = selectUserSchema;
+export type ResponseUser = User;

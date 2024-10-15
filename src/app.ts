@@ -4,22 +4,22 @@ import cors from 'cors';
 import express from 'express';
 import morgan from 'morgan';
 import passport from 'passport';
+import 'zod-openapi/extend';
 import { env, validateEnv } from './config/env.config';
 import { NotFoundException } from './lib/exceptions';
 import { devConsole, sessionOptions } from './lib/utils';
 import { handleAsync } from './middlewares/handle-async';
 import { handleErrorRequest } from './middlewares/handle-error-request';
 import { handleSessionRegenerate } from './middlewares/handle-session-regenerate';
+import { openApiSpecs, serveApiReference } from './openapi';
 import { GoogleStrategy } from './passport/google.strategy';
 import { serializer } from './passport/serializer';
 import { authRoute } from './routes/auth.route';
-import { paragraphRoute } from './routes/paragraph.route';
-import { playerRoute } from './routes/player.route';
-import { raceRoute } from './routes/race.route';
-import { resultRoute } from './routes/result.route';
+import { paragraphsRoute } from './routes/paragraphs.route';
+import { resultsRoute } from './routes/results.route';
 import { statsRoute } from './routes/stats.route';
-import { trackRoute } from './routes/track.route';
-import { userRoute } from './routes/user.route';
+import { tracksRoute } from './routes/tracks.route';
+import { usersRoute } from './routes/users.route';
 
 const app = express();
 validateEnv();
@@ -51,13 +51,15 @@ app.get(
 
 /* --------- routes --------- */
 app.use('/api/auth', authRoute);
-app.use('/api/users', userRoute);
-app.use('/api/players', playerRoute);
-app.use('/api/tracks', trackRoute);
-app.use('/api/races', raceRoute);
-app.use('/api/paragraphs', paragraphRoute);
-app.use('/api/results', resultRoute);
+app.use('/api/users', usersRoute);
+app.use('/api/tracks', tracksRoute);
+app.use('/api/paragraphs', paragraphsRoute);
+app.use('/api/results', resultsRoute);
 app.use('/api/stats', statsRoute);
+app.get('/doc', (req, res) => {
+  return res.json(openApiSpecs);
+});
+app.get('/reference', serveApiReference);
 app.use(() => {
   throw new NotFoundException();
 });

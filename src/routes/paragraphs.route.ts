@@ -5,7 +5,7 @@ import {
 import { Router } from 'express';
 
 const router = Router();
-export const paragraphRoute = router;
+export const paragraphsRoute = router;
 
-router.get('/', generateRandomParagraph);
+router.get('/random', generateRandomParagraph);
 router.get('/:id', generateParagraphById);

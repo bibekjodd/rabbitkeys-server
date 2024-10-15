@@ -1,12 +1,14 @@
 import {
   getProfile,
   getUserDetails,
+  queryUsers,
   updateProfile
 } from '@/controllers/user.controller';
 import { Router } from 'express';
 
 const router = Router();
-export const userRoute = router;
+export const usersRoute = router;
 
+router.get('/', queryUsers);
 router.route('/profile').get(getProfile).put(updateProfile);
 router.get('/:id', getUserDetails);

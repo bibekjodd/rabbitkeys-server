@@ -6,6 +6,8 @@ import {
   sqliteTable,
   text
 } from 'drizzle-orm/sqlite-core';
+import { createSelectSchema } from 'drizzle-zod';
+import { z } from 'zod';
 import { users } from './user.schema';
 
 export const races = sqliteTable(
@@ -36,3 +38,6 @@ export const races = sqliteTable(
 
 export type Race = typeof races.$inferSelect;
 export type InsertRace = typeof races.$inferInsert;
+export const selectRaceSchema = createSelectSchema(races);
+export const responseRaceSchema = selectRaceSchema;
+export type ResponseRace = z.infer<typeof responseRaceSchema>;
