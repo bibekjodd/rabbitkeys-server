@@ -1,12 +1,6 @@
 import { createId } from '@paralleldrive/cuid2';
 import { getTableColumns } from 'drizzle-orm';
-import {
-  integer,
-  primaryKey,
-  sqliteTable,
-  text,
-  unique
-} from 'drizzle-orm/sqlite-core';
+import { integer, primaryKey, sqliteTable, text, unique } from 'drizzle-orm/sqlite-core';
 import { createSelectSchema } from 'drizzle-zod';
 
 export const users = sqliteTable(
@@ -19,9 +13,7 @@ export const users = sqliteTable(
     totalRaces: integer('total_races').notNull().default(0),
     speed: integer('speed').notNull().default(0),
     topSpeed: integer('top_speed').notNull().default(0),
-    carImage: text('car_image')
-      .notNull()
-      .default('https://i.postimg.cc/F1thctp0/car5.png'),
+    carImage: text('car_image').notNull().default('https://i.postimg.cc/F1thctp0/car5.png'),
     role: text('role', { enum: ['user', 'admin'] })
       .notNull()
       .default('user'),

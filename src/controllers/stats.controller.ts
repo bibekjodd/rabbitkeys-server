@@ -1,10 +1,10 @@
 import { db } from '@/config/database';
-import { handleAsync } from '@/middlewares/handle-async';
-import { races } from '@/schemas/race.schema';
-import { selectUserSnapshot, users } from '@/schemas/user.schema';
+import { races } from '@/schemas/races.schema';
+import { selectUserSnapshot, users } from '@/schemas/users.schema';
 import { desc, eq } from 'drizzle-orm';
+import { RequestHandler } from 'express';
 
-export const getLeaderboard = handleAsync(async (req, res) => {
+export const getLeaderboard: RequestHandler = async (req, res) => {
   const leaderboard = await db
     .select({
       speed: races.speed,
@@ -19,5 +19,5 @@ export const getLeaderboard = handleAsync(async (req, res) => {
     .orderBy(desc(races.speed))
     .limit(20);
 
-  return res.json({ leaderboard });
-});
+  res.json({ leaderboard });
+};

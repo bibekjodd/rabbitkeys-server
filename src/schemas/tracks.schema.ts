@@ -1,14 +1,8 @@
 import { createId } from '@paralleldrive/cuid2';
-import {
-  foreignKey,
-  integer,
-  primaryKey,
-  sqliteTable,
-  text
-} from 'drizzle-orm/sqlite-core';
+import { foreignKey, integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
-import { users } from './user.schema';
+import { users } from './users.schema';
 
 export const tracks = sqliteTable(
   'tracks',
@@ -46,15 +40,15 @@ export const playerStateSchema = z.object({
   id: z.string(),
   name: z.string(),
   email: z.string(),
-  image: z.string().nullish(),
-  carImage: z.string().nullish(),
+  image: z.string().nullable(),
+  carImage: z.string(),
   isFinished: z.boolean(),
   lastSeen: z.string(),
-  postition: z.number().positive().nullish(),
-  accuracy: z.number().positive().max(100).nullish(),
-  speed: z.number().positive().max(500).nullish(),
-  topSpeed: z.number().positive().max(500).nullish(),
-  duration: z.number().positive().nullish()
+  position: z.number().positive(),
+  accuracy: z.number().positive().max(100),
+  speed: z.number().positive().max(500),
+  topSpeed: z.number().positive().max(500),
+  duration: z.number().positive()
 });
 export type PlayerState = z.infer<typeof playerStateSchema>;
 export const selectTrackSchema = createSelectSchema(tracks);

@@ -128,8 +128,7 @@ export const tracksDoc: ZodOpenApiPathsObject = {
       responses: {
         200: { description: 'Score updated successfully' },
         400: {
-          description:
-            'Request body is invalid or track is dismissed due to inactivty'
+          description: 'Request body is invalid or track is dismissed due to inactivty'
         },
         401: { description: 'User is not authorized' },
         403: {

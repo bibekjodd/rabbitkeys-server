@@ -8,7 +8,6 @@ import 'zod-openapi/extend';
 import { env, validateEnv } from './config/env.config';
 import { NotFoundException } from './lib/exceptions';
 import { devConsole, sessionOptions } from './lib/utils';
-import { handleAsync } from './middlewares/handle-async';
 import { handleErrorRequest } from './middlewares/handle-error-request';
 import { handleSessionRegenerate } from './middlewares/handle-session-regenerate';
 import { openApiSpecs, serveApiReference } from './openapi';
@@ -38,16 +37,13 @@ app.use(passport.session());
 passport.use('google', GoogleStrategy);
 serializer();
 
-app.get(
-  '/',
-  handleAsync(async (req, res) => {
-    return res.json({
-      message: 'Api is running fine...',
-      env: env.NODE_ENV,
-      date: new Date().toISOString()
-    });
-  })
-);
+app.get('/', (req, res) => {
+  res.json({
+    message: 'Api is running fine...',
+    env: env.NODE_ENV,
+    date: new Date().toISOString()
+  });
+});
 
 /* --------- routes --------- */
 app.use('/api/auth', authRoute);
@@ -57,7 +53,7 @@ app.use('/api/paragraphs', paragraphsRoute);
 app.use('/api/results', resultsRoute);
 app.use('/api/stats', statsRoute);
 app.get('/doc', (req, res) => {
-  return res.json(openApiSpecs);
+  res.json(openApiSpecs);
 });
 app.get('/reference', serveApiReference);
 app.use(() => {

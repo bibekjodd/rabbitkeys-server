@@ -1,7 +1,7 @@
 import { db } from '@/config/database';
 import { env } from '@/config/env.config';
 import { selectRandomCarImage } from '@/lib/images';
-import { users } from '@/schemas/user.schema';
+import { users } from '@/schemas/users.schema';
 import { Strategy } from 'passport-google-oauth20';
 
 export const GoogleStrategy = new Strategy(

@@ -1,6 +1,6 @@
-import { postRaceResultSchema } from '@/dtos/race.dto';
-import { getPreviousResultsSchema } from '@/dtos/result.dto';
-import { responseRaceSchema } from '@/schemas/race.schema';
+import { postRaceResultSchema } from '@/dtos/races.dto';
+import { getPreviousResultsSchema } from '@/dtos/results.dto';
+import { responseRaceSchema } from '@/schemas/races.schema';
 import { z } from 'zod';
 import { ZodOpenApiPathsObject } from 'zod-openapi';
 

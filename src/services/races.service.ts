@@ -1,16 +1,16 @@
 import { db } from '@/config/database';
-import { InsertRace, races } from '@/schemas/race.schema';
+import { InsertRace, races } from '@/schemas/races.schema';
 import { Track } from '@/schemas/tracks.schema';
-import { users } from '@/schemas/user.schema';
+import { users } from '@/schemas/users.schema';
 import { eq, sql } from 'drizzle-orm';
 
 export const updateRaceResultFromTrack = async (track: Track) => {
   const insertData: InsertRace[] = track.players.map((player) => ({
     userId: player.id,
-    position: player.position!,
+    position: player.position,
     accuracy: player.accuracy,
-    speed: player.speed!,
-    topSpeed: player.topSpeed!,
+    speed: player.speed,
+    topSpeed: player.topSpeed,
     createdAt: new Date().toISOString(),
     isMultiplayer: 1
   }));

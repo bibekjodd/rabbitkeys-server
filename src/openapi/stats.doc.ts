@@ -1,4 +1,4 @@
-import { responseUserSchema } from '@/schemas/user.schema';
+import { responseUserSchema } from '@/schemas/users.schema';
 import { z } from 'zod';
 import { ZodOpenApiPathsObject } from 'zod-openapi';
 

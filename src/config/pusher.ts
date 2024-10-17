@@ -7,7 +7,7 @@ const createPusher = (): Pusher => {
       appId: env.PUSHER_APP_ID,
       key: env.PUSHER_KEY,
       secret: env.PUSHER_SECRET,
-      cluster: 'mt1'
+      cluster: env.PUSHER_CLUSTER
     });
   }
   return globalThis.__PUSHER__;

@@ -1,17 +1,17 @@
 import { db } from '@/config/database';
-import { postRaceResultSchema } from '@/dtos/race.dto';
-import { getPreviousResultsSchema } from '@/dtos/result.dto';
+import { postRaceResultSchema } from '@/dtos/races.dto';
+import { getPreviousResultsSchema } from '@/dtos/results.dto';
 import { UnauthorizedException } from '@/lib/exceptions';
-import { handleAsync } from '@/middlewares/handle-async';
-import { races, ResponseRace } from '@/schemas/race.schema';
-import { users } from '@/schemas/user.schema';
+import { races, ResponseRace } from '@/schemas/races.schema';
+import { users } from '@/schemas/users.schema';
 import { and, desc, eq, lt, sql } from 'drizzle-orm';
+import { RequestHandler } from 'express';
 
-export const updateRaceResult = handleAsync<
+export const updateRaceResult: RequestHandler<
   unknown,
   { result: ResponseRace },
   { speed: unknown; topSpeed: unknown }
->(async (req, res) => {
+> = async (req, res) => {
   if (!req.user) throw new UnauthorizedException();
   const { speed, topSpeed, accuracy } = postRaceResultSchema.parse(req.body);
   const [result] = await db
@@ -38,13 +38,13 @@ export const updateRaceResult = handleAsync<
     })
     .where(eq(users.id, req.user.id))
     .execute();
-  return res.status(201).json({ result: result! });
-});
+  res.status(201).json({ result: result! });
+};
 
-export const getPreviousResults = handleAsync<
-  unknown,
-  { results: ResponseRace[] }
->(async (req, res) => {
+export const getPreviousResults: RequestHandler<unknown, { results: ResponseRace[] }> = async (
+  req,
+  res
+) => {
   if (!req.user) throw new UnauthorizedException();
   const { cursor, limit } = getPreviousResultsSchema.parse(req.query);
 
@@ -55,5 +55,5 @@ export const getPreviousResults = handleAsync<
     .orderBy(desc(races.createdAt))
     .limit(limit);
 
-  return res.json({ results });
-});
+  res.json({ results });
+};

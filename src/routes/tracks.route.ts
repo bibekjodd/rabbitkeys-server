@@ -6,7 +6,7 @@ import {
   leaveTrack,
   startRace,
   updateScore
-} from '@/controllers/track.controller';
+} from '@/controllers/tracks.controller';
 import { Router } from 'express';
 
 const router = Router();

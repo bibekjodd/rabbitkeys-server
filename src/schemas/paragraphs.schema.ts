@@ -1,10 +1,5 @@
 import { createId } from '@paralleldrive/cuid2';
-import {
-  integer,
-  primaryKey,
-  sqliteTable,
-  text
-} from 'drizzle-orm/sqlite-core';
+import { integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { createSelectSchema } from 'drizzle-zod';
 
 export const paragraphs = sqliteTable(

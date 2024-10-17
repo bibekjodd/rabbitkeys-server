@@ -1,4 +1,4 @@
-import { responseParagraphSchema } from '@/schemas/paragraph.schema';
+import { responseParagraphSchema } from '@/schemas/paragraphs.schema';
 import { z } from 'zod';
 import { ZodOpenApiPathsObject } from 'zod-openapi';
 
@@ -10,10 +10,7 @@ export const paragraphsDoc: ZodOpenApiPathsObject = {
       summary: 'Generate random paragraph',
       requestParams: {
         query: z.object({
-          skip: z
-            .string()
-            .optional()
-            .openapi({ description: 'Paragraph to skip from random' })
+          skip: z.string().optional().openapi({ description: 'Paragraph to skip from random' })
         })
       },
       responses: {

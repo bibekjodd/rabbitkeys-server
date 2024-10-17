@@ -3,12 +3,7 @@ import { HttpException } from '@/lib/exceptions';
 import { ErrorRequestHandler } from 'express';
 import { ZodError } from 'zod';
 
-export const handleErrorRequest: ErrorRequestHandler = (
-  err,
-  req,
-  res,
-  next
-) => {
+export const handleErrorRequest: ErrorRequestHandler = (err, req, res, next) => {
   let stack = null;
   let message = err.message || 'Internal Server Error';
   let statusCode = err.statusCode || 500;
@@ -34,7 +29,7 @@ export const handleErrorRequest: ErrorRequestHandler = (
     }
   }
 
-  return res.status(statusCode).json({
+  res.status(statusCode).json({
     message,
     stack: env.NODE_ENV === 'development' ? stack : undefined
   });

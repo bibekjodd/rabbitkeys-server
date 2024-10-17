@@ -1,7 +1,7 @@
 import {
   generateParagraphById,
   generateRandomParagraph
-} from '@/controllers/paragraph.controller';
+} from '@/controllers/paragraphs.controller';
 import { Router } from 'express';
 
 const router = Router();

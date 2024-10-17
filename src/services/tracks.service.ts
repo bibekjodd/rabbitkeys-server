@@ -1,10 +1,5 @@
 import { db } from '@/config/database';
-import { pusher } from '@/config/pusher';
-import {
-  JoinedTrackResponse,
-  TrackDismissedResponse,
-  events
-} from '@/lib/events';
+import { onJoinedTrack, onTrackDismissed } from '@/lib/events';
 import { BadRequestException, ForbiddenException } from '@/lib/exceptions';
 import { PlayerState, Track, tracks } from '@/schemas/tracks.schema';
 import { eq } from 'drizzle-orm';
@@ -16,8 +11,7 @@ export const filterInactivePlayers = (track: Track) => {
   const inactivePlayers: string[] = [];
   for (const player of track.players) {
     const inactivityDuration = Date.now() - new Date(player.lastSeen).getTime();
-    if (inactivityDuration > maxInactivityDuration)
-      inactivePlayers.push(player.id);
+    if (inactivityDuration > maxInactivityDuration) inactivePlayers.push(player.id);
   }
 
   track.players = track.players.filter((player) => {
@@ -43,9 +37,7 @@ export const joinTrack = (track: Track, player: PlayerState) => {
   }
 
   if (track.isStarted) {
-    throw new ForbiddenException(
-      "Can't join track where the race has already begun."
-    );
+    throw new ForbiddenException("Can't join track where the race has already begun.");
   }
   if (track.players.length === 5) {
     throw new ForbiddenException(
@@ -54,14 +46,7 @@ export const joinTrack = (track: Track, player: PlayerState) => {
   }
 
   track.players.push(player);
-  pusher.trigger(track.id, events.joinedTrack, {
-    player: {
-      id: player.id,
-      name: player.name,
-      email: player.email,
-      image: player.image || null
-    }
-  } satisfies JoinedTrackResponse);
+  onJoinedTrack(track.id, { player });
 
   return track;
 };
@@ -69,41 +54,32 @@ export const joinTrack = (track: Track, player: PlayerState) => {
 export const dismissInactiveTrack = async (track: Track) => {
   // allow max 5 minutes inactivity for track
   const maxInactivityDuration = 5 * 60 * 1000;
-  let message =
-    'Track has been dismissed as players were inactive for a longer period';
+  let message = 'Track has been dismissed as players were inactive for a longer period';
   if (track.isStarted) {
-    message =
-      'Track has been dismissed as players were unable to finish the race within 5 minutes';
+    message = 'Track has been dismissed as players were unable to finish the race within 5 minutes';
   }
 
   const currentTime = Date.now();
   let isActiveTrack = true;
   if (track.isStarted) {
-    const inactivityDuration =
-      new Date().getTime() - new Date(track.startedAt!).getTime();
+    const inactivityDuration = new Date().getTime() - new Date(track.startedAt!).getTime();
     if (inactivityDuration > maxInactivityDuration) isActiveTrack = false;
   }
   if (!track.isStarted && !track.isFinished) {
-    const inactivityDuration =
-      currentTime - new Date(track.createdAt).getTime();
+    const inactivityDuration = currentTime - new Date(track.createdAt).getTime();
     if (inactivityDuration > maxInactivityDuration) isActiveTrack = false;
   }
   if (track.isFinished) {
-    const inactivityDuration =
-      currentTime - new Date(track.finishedAt!).getTime();
+    const inactivityDuration = currentTime - new Date(track.finishedAt!).getTime();
     if (inactivityDuration > maxInactivityDuration) isActiveTrack = false;
   }
 
   if (isActiveTrack) return;
-  const trackDismissedResponse: TrackDismissedResponse = {
-    message
-  };
-  const notifyOnTrackDismissed = pusher.trigger(
-    track.id,
-    events.trackDismissed,
-    trackDismissedResponse
-  );
-  const deleteTrack = db.delete(tracks).where(eq(tracks.id, track.id));
-  await Promise.all([deleteTrack, notifyOnTrackDismissed]);
+  await Promise.all([
+    onTrackDismissed(track.id, {
+      message
+    }),
+    db.delete(tracks).where(eq(tracks.id, track.id)).execute()
+  ]);
   throw new BadRequestException('Track has been dismissed due to inactivity');
 };

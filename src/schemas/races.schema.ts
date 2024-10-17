@@ -1,14 +1,8 @@
 import { createId } from '@paralleldrive/cuid2';
-import {
-  foreignKey,
-  integer,
-  primaryKey,
-  sqliteTable,
-  text
-} from 'drizzle-orm/sqlite-core';
+import { foreignKey, integer, primaryKey, sqliteTable, text } from 'drizzle-orm/sqlite-core';
 import { createSelectSchema } from 'drizzle-zod';
 import { z } from 'zod';
-import { users } from './user.schema';
+import { users } from './users.schema';
 
 export const races = sqliteTable(
   'races',

@@ -1,7 +1,4 @@
-import {
-  getPreviousResults,
-  updateRaceResult
-} from '@/controllers/result.controller';
+import { getPreviousResults, updateRaceResult } from '@/controllers/results.controller';
 import { Router } from 'express';
 
 const router = Router();
